@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+# frozen_string_literal: false
 
 token = ENV['TELEGRAM_TOKEN']
 
@@ -42,24 +42,31 @@ module PdfUploader
         when Telegram::Bot::Types::Message
           text = PdfUploader::URL.new(message.text).update_url!
           if text.url?
-            (links = PdfUploader::Parser.parse!(text)).first.each do |uri|
+            (links = PdfUploader::Parser.parse!(text)).first.compact.each do |uri|
               bot.api.send_message(chat_id: message.chat.id, text: uri)
             end
             bot.api.send_message(chat_id: message.chat.id,
-                                 text: "Links found: #{links.last}\nLinks filtered: #{filtered(links)} " \
+                                 text: "Links found: #{links[1]}\nLinks filtered: #{filtered(links)} " \
                                  "(#{links.first.size} uploaded)")
           else
-            bot.api.send_message(chat_id: message.chat.id, text: 'Invalid url')
+            bot.api.send_message(chat_id: message.chat.id, text: 'Invalid url.')
           end
         end
         break
+      rescue NoMethodError => e
+        bot.logger.error(e)
+        bot.logger.error { "Invalid url: #{message.text}" }
+        bot.api.send_message(chat_id: message.chat.id, text: 'Invalid url.')
+      rescue NotImplementedError => e
+        bot.logger.error(e)
+        bot.logger.error { "Invalid url: #{message.text}" }
+        bot.api.send_message(chat_id: message.chat.id,
+                             text: 'Provided link is not an index of resource. Report if there is a problem.')
       end
     end
 
     def filtered(links)
-      links.last - links.first.size
-    rescue NoMethodError
-      'Invalid url or no links were found.'
+      links[1] - links.first.size
     end
 
     def commands

@@ -8,7 +8,6 @@ module PdfUploader
 
     def url?
       uri = URI.parse(self)
-      pp self
       HTTParty.get(self).code == 200 if uri.is_a?(URI::HTTP) && !uri.host.nil?
     rescue URI::InvalidURIError
       false
