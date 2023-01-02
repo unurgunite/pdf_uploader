@@ -97,6 +97,11 @@ git push origin refactor
 And then make new pull request with additional notes of what you have done. The better the changes are scheduled, the
 faster the PR will be checked.
 
+## Code of Conduct
+
+Everyone interacting in the `Genius::Api` project's codebases, issue trackers, chat rooms and mailing lists is expected
+to follow the [code of conduct](https://github.com/unurgunite/pdf_uploader/blob/master/CODE_OF_CONDUCT.md).
+
 ## License
 
 The project is available as open source under the terms of
@@ -122,8 +127,10 @@ the [CC BY-SA 4.0 License](https://creativecommons.org/licenses/by-sa/4.0/)
 
 [5]:https://github.com/unurgunite/pdf_uploader#requirements
 
-[6]:https://github.com/unurgunite/pdf_uploader#development
+[6]:https://github.com/unurgunite/pdf_uploader#contributing
 
-[7]:https://github.com/unurgunite/pdf_uploader#contributing
+[7]:https://github.com/unurgunite/pdf_uploader#license
 
-[8]:https://github.com/unurgunite/pdf_uploader#license
+[7]:https://github.com/unurgunite/pdf_uploader#license
+
+[8]:https://github.com/unurgunite/genius-api#code-of-conduct
