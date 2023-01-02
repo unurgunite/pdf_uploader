@@ -2,8 +2,6 @@
 
 source 'https://rubygems.org'
 
-gem 'rubocop', require: false
-
 gem 'telegram-bot-ruby'
 
 gem 'nokogiri'
@@ -11,3 +9,5 @@ gem 'nokogiri'
 gem 'httparty'
 
 gem 'dotenv'
+
+gem 'rubocop', require: false
