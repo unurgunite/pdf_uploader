@@ -19,7 +19,7 @@ module PdfUploader
       def parse!(url)
         site = HTTParty.get(url)
         document = Nokogiri::HTML(site)
-        raise NotImplementedError unless document.at('title:contains("Index of")')
+        raise NotImplementedError unless contains?(document)
 
         document.search('a').each_with_object(Array.new(3) { |i| [] if i.zero? }).with_index(1) do |(el, arr), i|
           if (href = el['href']) == '../' || href.end_with?('/') || apache?(href) # || (!href.end_with?('/') && !href.match?(FILE_REGEX))
@@ -32,6 +32,17 @@ module PdfUploader
       end
 
       private
+
+      # +PdfUploader::Parser.contains?(document)+     -> bool
+      #
+      # A predicate method to check if "Index of" words are provided.
+      #
+      # @private
+      # @return [TrueClass] if link contains "Index of" words.
+      # @return [FalseClass] if link does not contain "Index of" words.
+      def contains?(document)
+        document.at('title:contains("Index of")') || document.at('h1:contains("Index of")')
+      end
 
       # +PdfUploader::Parser.apache?+                 -> bool
       #

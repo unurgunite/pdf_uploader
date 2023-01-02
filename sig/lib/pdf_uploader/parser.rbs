@@ -6,6 +6,8 @@ module PdfUploader
 
     private
 
+    def self.contains?: (Nokogiri::HTML4::Document document) -> bool
+
     def self.apache?: (String href) -> bool
   end
 end
