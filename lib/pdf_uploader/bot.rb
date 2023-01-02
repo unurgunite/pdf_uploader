@@ -53,20 +53,21 @@ module PdfUploader
           end
         end
         break
-      rescue NoMethodError => e
+      rescue NoMethodError, NotImplementedError => e
         bot.logger.error(e)
         bot.logger.error { "Invalid url: #{message.text}" }
-        bot.api.send_message(chat_id: message.chat.id, text: 'Invalid url.')
-      rescue NotImplementedError => e
-        bot.logger.error(e)
-        bot.logger.error { "Invalid url: #{message.text}" }
-        bot.api.send_message(chat_id: message.chat.id,
-                             text: 'Provided link is not an index of resource. Report if there is a problem.')
+        bot.api.send_message(chat_id: message.chat.id, text: error_handler(e))
       end
     end
 
     def filtered(links)
       links[1] - links.first.size
+    end
+
+    def error_handler(error)
+      return 'Invalid url.' if error.is_a?(NoMethodError)
+
+      'Provided link is not an index of resource. Report if there is a problem.'
     end
 
     def commands
@@ -77,5 +78,5 @@ module PdfUploader
   end
 end
 
-bot = PdfUploader::Bot.new(token: token)
+bot = PdfUploader::Bot.new(token:)
 bot.start!

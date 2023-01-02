@@ -3,7 +3,7 @@
 module PdfUploader
   module Parser
     class << self
-      FILE_REGEX = %r{https?://[\w.-]+(?:/[\w.-]+)*/([\w.-]+\.\w{2,})}.freeze
+      FILE_REGEX = %r{https?://[\w.-]+(?:/[\w.-]+)*/([\w.-]+\.\w{2,})}
 
       def parse!(url)
         site = HTTParty.get(url)
