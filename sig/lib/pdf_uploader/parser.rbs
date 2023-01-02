@@ -1,0 +1,11 @@
+module PdfUploader
+  module Parser
+    FILE_REGEX: ::Regexp
+
+    def self.parse!: (URL url) -> [Array[String], Integer]
+
+    private
+
+    def self.apache?: (String href) -> bool
+  end
+end

@@ -10,4 +10,8 @@ gem 'httparty'
 
 gem 'dotenv'
 
+gem 'rbs'
+
+gem 'debug'
+
 gem 'rubocop', require: false

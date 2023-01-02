@@ -1,0 +1,7 @@
+module PdfUploader
+  class URL
+    def update_url!: () -> (self | URL)
+
+    def url?: () -> bool
+  end
+end

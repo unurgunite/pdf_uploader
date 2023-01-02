@@ -1,0 +1,23 @@
+module PdfUploader
+  class Bot
+    COMMANDS: ::Hash[::String, "Start the bot" | "Upload url to get files from resource" | "Print all commands"]
+
+    @commands: String | nil
+
+    @token: String
+
+    def initialize: (token: String) -> void
+
+    def start!: () -> untyped
+
+    private
+
+    def receive_url: (Bot `bot`) -> untyped
+
+    def filtered: (Parser links) -> Integer
+
+    def error_handler: (StandardError error) -> ("Invalid url." | "Provided link is not an index of resource. Report if there is a problem.")
+
+    def commands: () -> String
+  end
+end
