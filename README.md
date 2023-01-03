@@ -37,7 +37,7 @@ If everything downloaded without any errors, go to [BotFather](https://t.me/BotF
 should store it somewhere, so create a file `.env` at project's root as below:
 
 ```shell
-echo 'YOUR-TOKEN-HERE' > .env
+echo 'TELEGRAM_TOKEN=YOUR-TOKEN-HERE' > .env
 ```
 
 ## Usage
@@ -99,7 +99,7 @@ faster the PR will be checked.
 
 ## Code of Conduct
 
-Everyone interacting in the `Genius::Api` project's codebases, issue trackers, chat rooms and mailing lists is expected
+Everyone interacting in the `PdfUploader` project's codebases, issue trackers, chat rooms and mailing lists is expected
 to follow the [code of conduct](https://github.com/unurgunite/pdf_uploader/blob/master/CODE_OF_CONDUCT.md).
 
 ## License
