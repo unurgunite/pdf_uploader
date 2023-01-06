@@ -4,6 +4,10 @@ module PdfUploader
 
     def self.parse!: (URL url) -> [Array[String], Integer]
 
+    def self.search_links: (Nokogiri::HTML4::Document document) -> [Array[String], Integer]
+
+    def self.skip_link?: (String href) -> bool
+
     private
 
     def self.contains?: (Nokogiri::HTML4::Document document) -> bool

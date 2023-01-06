@@ -9,7 +9,7 @@ module PdfUploader
 
       # +PdfUploader::Parser.parse!(url)+             -> [Array[String], Integer]
       #
-      # This method parses +<a>+ HTML tags, presented in file browser. It saves the
+      # This method parses <code><a></code> HTML tags, presented in file browser. It saves the
       # paths to the files in an array, and also indicates the number of these
       # files for further analysis.
       #
@@ -21,14 +21,7 @@ module PdfUploader
         document = Nokogiri::HTML(site)
         raise NotImplementedError unless contains?(document)
 
-        document.search('a').each_with_object(Array.new(3) { |i| [] if i.zero? }).with_index(1) do |(el, arr), i|
-          if (href = el['href']) == '../' || href.end_with?('/') || apache?(href) # || (!href.end_with?('/') && !href.match?(FILE_REGEX))
-            next
-          end
-
-          arr[0] << (PdfUploader::URL.new(href).url? ? href.to_s : "#{url}#{href}")
-          arr[1] = i
-        end
+        search_links(document)
       end
 
       private
@@ -44,10 +37,41 @@ module PdfUploader
         document.at('title:contains("Index of")') || document.at('h1:contains("Index of")')
       end
 
+      # +PdfUploader::Parser.search_links(document)+  -> bool
+      #
+      # A private method to search links on a page.
+      #
+      # @private
+      # @param [Nokogiri::HTML4::Document] document An HTML document.
+      # @return [Array<Array<String>, Integer>]
+      def search_links(document)
+        arr = Array.new(3) { |i| [] if i.zero? }
+        document.search('a').each_with_index do |el, i|
+          href = el['href']
+          next if skip_link?(href)
+
+          arr[0] << (PdfUploader::URL.new(href).url? ? href.to_s : "#{url}#{href}")
+          arr[1] = i + 1
+        end
+        arr
+      end
+
+      # +PdfUploader::Parser.skip_link?(href)+        -> bool
+      #
+      # Helper method which checks if link should be skipped in a loop
+      #
+      # @private
+      # @param [String] href Hypertext reference for file.
+      # @return [Boolean]
+      def skip_link?(href)
+        href == '../' || href.end_with?('/') || apache?(href)
+      end
+
       # +PdfUploader::Parser.apache?+                 -> bool
       #
       # This method checks if parsed link is Apache web server link. It is known after Apache mod_autoindex sorting
-      # method. For further reading go to {Apache documentation}[https://httpd.apache.org/docs/current/mod/mod_autoindex.html].
+      # method. For further reading go
+      # to {Apache documentation}[https://httpd.apache.org/docs/current/mod/mod_autoindex.html].
       #
       # @private
       # @param [String] href
