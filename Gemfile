@@ -15,3 +15,7 @@ gem 'rbs'
 gem 'debug'
 
 gem 'rubocop', require: false
+
+gem 'redis'
+
+gem 'sidekiq'

@@ -60,12 +60,7 @@ module PdfUploader
         when Telegram::Bot::Types::Message
           text = PdfUploader::URL.new(message.text).update_url!
           if text.url?
-            (links = PdfUploader::Parser.parse!(text)).first.compact.each do |uri|
-              bot.api.send_message(chat_id: message.chat.id, text: uri)
-            end
-            bot.api.send_message(chat_id: message.chat.id,
-                                 text: "Links found: #{links[1]}\nLinks filtered: #{filtered(links)} " \
-                                 "(#{links.first.size} uploaded)")
+            ParseLink.perform_async(bot, message, text)
           else
             bot.api.send_message(chat_id: message.chat.id, text: 'Invalid url.')
           end
