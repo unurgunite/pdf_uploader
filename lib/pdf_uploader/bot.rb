@@ -26,6 +26,7 @@ module PdfUploader
       Telegram::Bot::Client.run(@token, logger: Logger.new($stderr)) do |bot|
         bot.logger.info('Bot has been started')
         bot.listen do |message|
+          bot.logger.info(message)
           case message.text
           when '/start'
             bot.api.send_message(chat_id: message.chat.id,
@@ -39,7 +40,7 @@ module PdfUploader
             bot.api.send_message(chat_id: message.chat.id, text: "My commands are:\n#{commands}")
           else
             bot.api.send_message(chat_id: message.chat.id,
-                                 text: "Sorry, I don't understand. You can find my commands via /help.")
+                                 text: "Sorry, I don't understand. You can find my commands via /help.\nNote: this bot can scrawl only open directories ('Index of') and nothing else! Be patient while uploading content here.")
           end
         end
       end
