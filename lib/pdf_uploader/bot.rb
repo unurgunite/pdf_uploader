@@ -26,6 +26,7 @@ module PdfUploader
       Telegram::Bot::Client.run(@token, logger: Logger.new($stderr)) do |bot|
         bot.logger.info('Bot has been started')
         bot.listen do |message|
+          return unless message.is_a?(Telegram::Bot::Types::Message)
           bot.logger.info(message)
           case message.text
           when '/start'
@@ -57,19 +58,16 @@ module PdfUploader
     # @return [Object]
     def receive_url(bot)
       bot.listen do |message|
-        case message
-        when Telegram::Bot::Types::Message
-          text = PdfUploader::URL.new(message.text).update_url!
-          if text.url?
-            (links = PdfUploader::Parser.parse!(text)).first.compact.each do |uri|
-              bot.api.send_message(chat_id: message.chat.id, text: uri)
-            end
-            bot.api.send_message(chat_id: message.chat.id,
-                                 text: "Links found: #{links[1]}\nLinks filtered: #{filtered(links)} " \
-                                 "(#{links.first.size} uploaded)")
-          else
-            bot.api.send_message(chat_id: message.chat.id, text: 'Invalid url.')
+        text = PdfUploader::URL.new(message.text).update_url!
+        if text.url?
+          (links = PdfUploader::Parser.parse!(text)).first.compact.each do |uri|
+            bot.api.send_message(chat_id: message.chat.id, text: uri)
           end
+          bot.api.send_message(chat_id: message.chat.id,
+                               text: "Links found: #{links[1]}\nLinks filtered: #{filtered(links)} " \
+                                 "(#{links.first.size} uploaded)")
+        else
+          bot.api.send_message(chat_id: message.chat.id, text: 'Invalid url.')
         end
         break
       rescue NoMethodError, NotImplementedError => e
